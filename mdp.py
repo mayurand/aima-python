@@ -111,15 +111,25 @@ sequential_decision_environment = GridMDP([[-0.04, -0.04, -0.04, +1],
 
 def value_iteration(mdp, epsilon=0.001):
     "Solving an MDP by value iteration. [Figure 17.4]"
+    
+    ## Initialize the utility/value for all states
     U1 = {s: 0 for s in mdp.states}
     R, T, gamma = mdp.R, mdp.T, mdp.gamma
+    
+    print(U1)
+    
     while True:
         U = U1.copy()
         delta = 0
+        
+        # For each state s in a MDP, apply value iteration to calculate value of each state
         for s in mdp.states:
             U1[s] = R(s) + gamma * max([sum([p * U[s1] for (p, s1) in T(s, a)])
                                         for a in mdp.actions(s)])
+            print(delta)
             delta = max(delta, abs(U1[s] - U[s]))
+            
+        ## Break at convergence (epsilon)
         if delta < epsilon * (1 - gamma) / gamma:
             return U
 
